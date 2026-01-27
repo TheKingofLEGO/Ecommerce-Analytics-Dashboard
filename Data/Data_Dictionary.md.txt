@@ -1,0 +1,205 @@
+# Data Dictionary - E-Commerce Analytics
+
+## Dataset Overview
+**Source:** Online Retail Dataset - UCI Machine Learning Repository  
+**Description:** Transactional data from a UK-based online retail company  
+**Date Range:** 01-Dec-2010 to 09-Dec-2011  
+**Total Records (Raw):** 541,909 transactions  
+**Total Records (Clean):** ~400,000 transactions (after removing returns and nulls)
+
+---
+
+## Column Definitions
+
+### InvoiceNo
+- **Data Type:** VARCHAR(20)
+- **Description:** Unique 6-digit invoice number for each transaction
+- **Format:** Numeric (e.g., 536365)
+- **Special Cases:** 
+  - Invoices starting with 'C' indicate cancellations/returns (removed in cleaning)
+- **Uniqueness:** Not unique (one invoice can contain multiple products)
+- **Null Values:** 0
+
+### StockCode
+- **Data Type:** VARCHAR(20)
+- **Description:** Unique product identifier assigned to each distinct product
+- **Format:** Alphanumeric (e.g., 85123A, 22423)
+- **Special Cases:**
+  - Codes starting with letters often indicate gift sets or bundles
+  - Manual adjustments may have codes like "ADJUST", "BANK CHARGES" (removed in cleaning)
+- **Null Values:** 0
+
+### Description
+- **Data Type:** VARCHAR(500)
+- **Description:** Product name or description
+- **Format:** Text string, typically in ALL CAPS
+- **Example:** "WHITE HANGING HEART T-LIGHT HOLDER"
+- **Special Cases:**
+  - Some descriptions are stock adjustments (removed in cleaning)
+  - Length varies from 10 to 100+ characters
+- **Null Values:** 1,454 in raw data (removed in cleaning)
+
+### Quantity
+- **Data Type:** INT
+- **Description:** Number of units of the product purchased in the transaction
+- **Range:** -80,995 to 80,995 (negatives indicate returns)
+- **Typical Range:** 1 to 100
+- **Business Logic:**
+  - Positive values = Sales
+  - Negative values = Returns/Cancellations (removed in cleaning)
+- **Null Values:** 0
+
+### InvoiceDate
+- **Data Type:** DATETIME
+- **Description:** Date and time when the transaction was generated
+- **Format:** MM/DD/YYYY HH:MM
+- **Example:** 12/1/2010 8:26
+- **Range:** 2010-12-01 to 2011-12-09
+- **Business Hours:** Primarily 7 AM to 8 PM GMT
+- **Null Values:** 0
+
+### UnitPrice
+- **Data Type:** DECIMAL(10,2)
+- **Description:** Price per unit of product in British Pounds (£)
+- **Currency:** GBP (£)
+- **Range:** 0.00 to 38,970.00
+- **Typical Range:** £0.85 to £25.00
+- **Special Cases:**
+  - Zero prices indicate adjustments or errors (removed in cleaning)
+  - Very high prices (>£1000) are typically bulk items or errors
+- **Null Values:** 0
+
+### CustomerID
+- **Data Type:** INT
+- **Description:** Unique identifier assigned to each customer
+- **Format:** 5-digit integer
+- **Example:** 17850
+- **Unique Customers:** 4,372
+- **Null Values:** 135,080 in raw data (24.9% - removed in cleaning)
+- **Business Note:** Missing CustomerIDs likely represent guest checkouts
+
+### Country
+- **Data Type:** VARCHAR(100)
+- **Description:** Name of the country where the customer resides
+- **Format:** Full country name (e.g., "United Kingdom", "Germany")
+- **Unique Values:** 38 countries
+- **Most Common:** United Kingdom (91% of transactions)
+- **Other Major Markets:** Germany, France, EIRE (Ireland), Spain
+- **Special Cases:**
+  - "Unspecified" appears in some records (minimal)
+  - "European Community" is used for some EU orders
+- **Null Values:** 0
+
+---
+
+## Calculated Columns (Added in Cleaning)
+
+### Revenue
+- **Data Type:** DECIMAL(10,2)
+- **Calculation:** Quantity × UnitPrice
+- **Description:** Total revenue generated from each line item
+- **Business Logic:** Only includes positive transactions (sales, not returns)
+
+### InvoiceYear
+- **Data Type:** INT
+- **Calculation:** YEAR(InvoiceDate)
+- **Values:** 2010, 2011
+- **Purpose:** Simplifies year-based aggregations
+
+### InvoiceMonth
+- **Data Type:** INT
+- **Calculation:** MONTH(InvoiceDate)
+- **Range:** 1-12
+- **Purpose:** Monthly trend analysis
+
+### InvoiceDay
+- **Data Type:** INT
+- **Calculation:** DAY(InvoiceDate)
+- **Range:** 1-31
+- **Purpose:** Daily pattern analysis
+
+### InvoiceHour
+- **Data Type:** INT
+- **Calculation:** DATEPART(HOUR, InvoiceDate)
+- **Range:** 0-23
+- **Purpose:** Hourly shopping pattern analysis
+
+### DayOfWeek
+- **Data Type:** VARCHAR(10)
+- **Calculation:** DATENAME(WEEKDAY, InvoiceDate)
+- **Values:** Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+- **Purpose:** Day-of-week trend analysis
+
+---
+
+## Data Quality Notes
+
+### Issues Addressed in Cleaning
+
+1. **Returns/Cancellations**
+   - 8,905 records with negative quantities (returns)
+   - Removed to focus on sales analysis
+   - Could be analyzed separately for refund analysis
+
+2. **Missing Customer IDs**
+   - 135,080 records (24.9%) without CustomerID
+   - Removed for customer-focused analysis
+   - Represents guest checkouts or data entry errors
+
+3. **Zero/Negative Prices**
+   - 1,254 records with UnitPrice ≤ 0
+   - Removed as likely data errors or adjustments
+
+4. **Missing Descriptions**
+   - 1,454 records without product description
+   - Removed for product analysis clarity
+
+5. **Duplicate Invoices**
+   - Multiple line items per invoice is normal (not duplicates)
+   - One invoice can have 1 to 600+ products
+
+### Final Clean Dataset Stats
+- **Records:** ~400,000 valid sales transactions
+- **Customers:** 4,372 unique customers
+- **Products:** 3,684 unique SKUs
+- **Date Range:** 12 months (Dec 2010 - Dec 2011)
+- **Revenue:** £9,747,747
+
+---
+
+## Business Definitions
+
+### Transaction
+A single line item in an invoice (one product at one price point)
+
+### Order
+A complete invoice (can contain multiple products/transactions)
+
+### Customer
+A unique individual identified by CustomerID (excludes guest checkouts)
+
+### SKU (Stock Keeping Unit)
+A unique product identified by StockCode
+
+### Basket
+All items purchased together in a single invoice
+
+### Revenue
+Total sales value (Quantity × UnitPrice) excluding returns
+
+---
+
+## Sample Data
+```
+InvoiceNo | StockCode | Description                    | Qty | InvoiceDate      | Price | CustomerID | Country
+----------|-----------|--------------------------------|-----|------------------|-------|------------|------------------
+536365    | 85123A    | WHITE HANGING HEART T-LIGHT    | 6   | 12/1/2010 8:26  | 2.55  | 17850      | United Kingdom
+536365    | 71053     | WHITE METAL LANTERN            | 6   | 12/1/2010 8:26  | 3.39  | 17850      | United Kingdom
+536366    | 22633     | HAND WARMER UNION JACK         | 6   | 12/1/2010 8:28  | 1.85  | 17850      | United Kingdom
+```
+
+---
+
+**Document Version:** 1.0  
+**Last Updated:** January 2026  
+**Maintained By:** William Fowler
