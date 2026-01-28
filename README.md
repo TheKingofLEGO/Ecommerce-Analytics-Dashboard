@@ -131,8 +131,6 @@ Product-level analysis for inventory and marketing decisions.
 
 **Business Value:** Optimize inventory and identify cross-sell opportunities
 
-![Product Performance](screenshots/page3_product_performance.png)
-
 ---
 
 Key DAX Measures
@@ -298,9 +296,9 @@ Author
 
 **[William Fowler]**
 
-📧 Email: [williamfowler002@gmail.com]  
-💼 LinkedIn: (https://www.linkedin.com/in/william-fowler-276718136/)   
-📂 GitHub: https://github.com/TheKingofLEGO
+Email: [williamfowler002@gmail.com]  
+LinkedIn: (https://www.linkedin.com/in/william-fowler-276718136/)   
+GitHub: https://github.com/TheKingofLEGO
 
 ---
 
