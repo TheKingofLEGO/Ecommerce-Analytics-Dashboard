@@ -12,17 +12,14 @@ Analyze geographic sales distribution across 38 countries
 Discover peak shopping hours and days for staffing optimization
 
 Technologies & Skills Demonstrated
-Technology: SQL Server
-Purpose: Data storage, cleaning, and complex analytical queries
-Technology: Power BI Desktop
-Purpose: Interactive dashboard development and data visualization
-Technology: DAX
-Purpose: Calculated measures, time intelligence, and customer segmentation
-Technology: Power Query
-Purpose: Data transformation and preparation
 
-Technology: Git/GitHub
-Purpose: Version control and project documentation
+| Technology | Purpose |
+|------------|---------|
+| SQL Server | Data storage, cleaning, and complex analytical queries |
+| Power BI Desktop | Interactive dashboard development and data visualization |
+| DAX | Calculated measures, time intelligence, and customer segmentation |
+| Power Query | Data transformation and preparation |
+| Git/GitHub | Version control and project documentation |
 
 Key Skills:
 SQL window functions and CTEs for analytical queries
@@ -44,39 +41,19 @@ Date Range: December 2010 - December 2011
 Total Revenue: £8,910,000
 
 Data Schema
-Column: InvoiceNo
-Type: VARCHAR(20)
-Description: Unique transaction identifier
-
-Column: StockCode
-Type: VARCHAR(20)
-Description: Product code
-
-Column: Description
-Type: VARCHAR(500)
-Description: Product name
-
-Column: Quantity
-Type: INT
-Description: Number of items purchased
-
-Column: InvoiceDate
-Type: DATETIME
-Description: Transaction date and time
-
-Column: UnitPrice
-Type: DECIMAL(10,2)
-Description: Price per unit in GBP (£)
-
-Column: CustomerID
-Type: INT
-Description: Unique customer identifier
-
-Column: Country
-Type: VARCHAR(100)
-Description: Customer country
+| Column | Type | Description |
+|--------|------|-------------|
+| InvoiceNo | VARCHAR(20) | Unique transaction identifier |
+| StockCode | VARCHAR(20) | Product code |
+| Description | VARCHAR(500) | Product name |
+| Quantity | INT | Number of items purchased |
+| InvoiceDate | DATETIME | Transaction date and time |
+| UnitPrice | DECIMAL(10,2) | Price per unit in GBP (£) |
+| CustomerID | INT | Unique customer identifier |
+| Country | VARCHAR(100) | Customer country |
 
 Key Analysis & Insights
+
 Revenue Analysis
 Total Revenue: £8.91M over 12 months
 Total Orders: 19,000 unique invoices
@@ -129,7 +106,6 @@ Revenue by day of week (operational patterns) with Thursday leading at £1.98M
 Hourly transaction volume (staffing insights) showing bell curve peaking midday
 
 Business Value: Quick 30-second health check for leadership
-
 Page 2: Customer Insights
 Deep-dive into customer behavior and segmentation.
 
@@ -141,7 +117,6 @@ Customer metrics matrix by country displaying total customers, total revenue, re
 Summary showing 301 customers across top countries with £1,429,602.70 in revenue
 
 Business Value: Identify high-value customers and retention opportunities
-
 Page 3: Product Performance
 Product-level analysis for inventory and marketing decisions.
 
@@ -157,6 +132,7 @@ Key DAX Measures
 
 Revenue Metrics
 
+```dax
 Total Revenue = SUM(online_retail_clean[Revenue])
 
 Avg Order Value = DIVIDE([Total Revenue], [Total Orders], 0)
@@ -167,9 +143,11 @@ DIVIDE(
     [Revenue Previous Month],
     0
 )
+```
 
 Customer Segmentation
 
+```dax
 One-Time Customers = 
 CALCULATE(
     DISTINCTCOUNT(online_retail_clean[CustomerID]),
@@ -184,19 +162,23 @@ CALCULATE(
 )
 
 Repeat Customer % = DIVIDE([Repeat Customers], [Total Customers], 0)
+```
 
 Time Intelligence
 
+```dax
 Revenue Previous Month = 
 CALCULATE(
     [Total Revenue],
     DATEADD(online_retail_clean[InvoiceDate], -1, MONTH)
 )
+```
 
 SQL Query Highlights
 
 Customer RFM Segmentation
 
+```sql
 WITH rfm_calc AS (
     SELECT 
         CustomerID,
@@ -223,9 +205,11 @@ SELECT
         ELSE 'At Risk'
     END AS customer_category
 FROM rfm_scores;
+```
 
 Product Basket Analysis
 
+```sql
 WITH product_pairs AS (
     SELECT 
         a.InvoiceNo,
@@ -244,9 +228,9 @@ FROM product_pairs
 GROUP BY product_a, product_b
 HAVING COUNT(*) >= 50
 ORDER BY times_bought_together DESC;
+```
 
 Learning Outcomes
-
 Through this project, I demonstrated proficiency in:
 
 SQL Skills
