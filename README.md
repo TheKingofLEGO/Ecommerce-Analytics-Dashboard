@@ -400,9 +400,9 @@ Based on the analysis, I recommend:
 
 **William Fowler**
 
-- Email: williamfowler003@gmail.com
-- LinkedIn: [linkedin.com/in/william-fowler-27B7181364](https://www.linkedin.com/in/william-fowler-27B7181364)
-- GitHub: [github.com/TheUnguidedECG](https://github.com/TheUnguidedECG)
+- Email: williamfowler002@gmail.com
+- LinkedIn: https://www.linkedin.com/in/william-fowler-276718136/
+- GitHub: https://github.com/TheKingofLEGO
 
 ---
 
